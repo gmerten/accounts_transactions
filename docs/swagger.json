@@ -1,0 +1,192 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API to manage accounts and transactions",
+        "title": "Accounts \u0026 Transactions API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/accounts": {
+            "post": {
+                "description": "This endpoint creates a new account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Creates a new account",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateAccountResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{accountID}": {
+            "get": {
+                "description": "This endpoint get a account by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get a account by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Account ID",
+                        "name": "accountID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.GetAccountResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions": {
+            "post": {
+                "description": "This endpoint creates a new transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Creates a new transaction",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "transaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateTransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateTransactionResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.CreateAccountRequest": {
+            "type": "object",
+            "required": [
+                "document_number"
+            ],
+            "properties": {
+                "document_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.CreateAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "document_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.CreateTransactionRequest": {
+            "type": "object",
+            "required": [
+                "account_id",
+                "amount",
+                "operation_type_id"
+            ],
+            "properties": {
+                "account_id": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "amount": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "operation_type_id": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ]
+                }
+            }
+        },
+        "api.CreateTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "operation_type_id": {
+                    "type": "integer"
+                },
+                "transaction_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.GetAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "document_number": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

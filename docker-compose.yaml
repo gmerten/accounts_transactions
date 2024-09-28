@@ -1,0 +1,38 @@
+
+services:
+  db:
+    image: mysql:8.0.39
+    container_name: mysql_local
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: transactions
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./scripts/migrations:/docker-entrypoint-initdb.d
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+       db:
+         condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: transactions
+    ports:
+      - "8080:8080"
+    links:
+      - db

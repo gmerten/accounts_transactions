@@ -1,0 +1,127 @@
+basePath: /
+definitions:
+  api.CreateAccountRequest:
+    properties:
+      document_number:
+        type: string
+    required:
+    - document_number
+    type: object
+  api.CreateAccountResponse:
+    properties:
+      account_id:
+        type: integer
+      document_number:
+        type: string
+    type: object
+  api.CreateTransactionRequest:
+    properties:
+      account_id:
+        minimum: 1
+        type: integer
+      amount:
+        minimum: 0
+        type: number
+      operation_type_id:
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        type: integer
+    required:
+    - account_id
+    - amount
+    - operation_type_id
+    type: object
+  api.CreateTransactionResponse:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        type: number
+      operation_type_id:
+        type: integer
+      transaction_id:
+        type: integer
+    type: object
+  api.GetAccountResponse:
+    properties:
+      account_id:
+        type: integer
+      document_number:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API to manage accounts and transactions
+  title: Accounts & Transactions API
+  version: "1.0"
+paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint creates a new account
+      parameters:
+      - description: Request body
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CreateAccountResponse'
+      summary: Creates a new account
+      tags:
+      - accounts
+  /accounts/{accountID}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint get a account by id
+      parameters:
+      - description: Account ID
+        in: path
+        name: accountID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.GetAccountResponse'
+      summary: Get a account by id
+      tags:
+      - accounts
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint creates a new transaction
+      parameters:
+      - description: Request body
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CreateTransactionResponse'
+      summary: Creates a new transaction
+      tags:
+      - transactions
+swagger: "2.0"
